@@ -126,5 +126,4 @@ This project is for educational/portfolio purposes.
 ## 👤 Author
 
 **Kanvadithya Ganapathi Tigulla**
-- GitHub: [@your-github-username](https://github.com/your-github-username)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/your-profile)
+- GitHub: [@Kanvaa](https://github.com/Kanvaa)
