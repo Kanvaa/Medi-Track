@@ -119,11 +119,6 @@ A fixed IV causes identical plaintexts to produce identical ciphertexts, enablin
 ### Why `open-in-view=false`?
 Prevents lazy-loading from masking N+1 query problems. Forces explicit data fetching via `JOIN FETCH`, resulting in predictable performance and no surprise LazyInitializationExceptions.
 
-## 📄 License
-
-This project was built from scratch by me as part of my learning journey in Java and Spring Boot. Feel free to explore the code, learn from it, or use it as a reference for your own projects. If you found it helpful, a ⭐ on the repo would mean a lot!
-
 ## 👤 Author
 
-**Kanvadithya Ganapathi Tigulla**
-- GitHub: [@Kanvaa](https://github.com/Kanvaa)
+Kanvadithya Ganapathi Tigulla — [@Kanvaa](https://github.com/Kanvaa)
