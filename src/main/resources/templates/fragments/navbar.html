@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <div class="navbar-container">
+        <a href="/dashboard" class="navbar-brand">
+            <span class="brand-icon">💊</span> MediTrack
+        </a>
+        <div class="navbar-links">
+            <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+            <a th:href="@{/medicines}" class="nav-link">Medicines</a>
+            <a th:href="@{/sales}" class="nav-link">Sales</a>
+            <a sec:authorize="hasRole('OWNER')" th:href="@{/admin/users}" class="nav-link">Users</a>
+            <a sec:authorize="hasRole('OWNER')" th:href="@{/audit-log}" class="nav-link">Audit Log</a>
+        </div>
+        <div class="navbar-user">
+            <span class="user-greeting">Logged in as: <strong sec:authentication="name">user</strong></span>
+            <span class="user-role badge badge-role" sec:authentication="principal.authorities">[ROLE]</span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-logout">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

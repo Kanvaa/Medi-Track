@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MediTrack — New Sale</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrapper">
+
+    <div class="page-header">
+        <h1>🛒 New Sale</h1>
+    </div>
+
+    <!-- Error messages -->
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <div class="card" style="max-width: 860px;">
+
+        <form th:action="@{/sales/save}" th:object="${sale}" method="post">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="customerName">Customer Name</label>
+                    <input type="text" id="customerName" th:field="*{customerName}" class="form-control"
+                           placeholder="e.g. John Doe" required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="customerPhone">Customer Phone</label>
+                    <input type="text" id="customerPhone" th:field="*{customerPhone}" class="form-control"
+                           placeholder="e.g. +91 9876543210"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="prescriptionNumber">Prescription Number</label>
+                <input type="text" id="prescriptionNumber" th:field="*{prescriptionNumber}" class="form-control"
+                       placeholder="e.g. RX-2025-001 (optional)"/>
+            </div>
+
+            <div class="separator"></div>
+
+            <h3 class="section-title mt-0">📋 Sale Items</h3>
+
+            <div class="table-responsive mb-2">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width:60%;">Medicine</th>
+                        <th style="width:25%;">Quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, iterStat : ${sale.items}">
+                        <td>
+                            <select th:name="'items[' + ${iterStat.index} + '].medicine.id'" class="form-control">
+                                <option value="">-- Select Medicine --</option>
+                                <option th:each="med : ${medicines}"
+                                        th:value="${med.id}"
+                                        th:text="${med.name + (med.prescriptionRequired ? ' [Rx]' : '') + (med.expired ? ' (EXPIRED)' : '')}"
+                                        th:disabled="${med.expired}"
+                                        th:selected="${item.medicine != null && item.medicine.id != null && item.medicine.id == med.id}">
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" th:name="'items[' + ${iterStat.index} + '].quantity'"
+                                   th:value="${item.quantity}" min="0" class="form-control"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="flex flex-gap">
+                <button type="submit" class="btn btn-primary">Complete Sale</button>
+                <a th:href="@{/sales}" class="btn btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MediTrack — Medicine Inventory</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrapper">
+
+    <div class="page-header">
+        <h1>💊 Medicine Inventory</h1>
+        <a sec:authorize="hasAnyRole('OWNER','PHARMACIST')" th:href="@{/medicines/new}" class="btn btn-primary">
+            + Add Medicine
+        </a>
+    </div>
+
+    <!-- Flash messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Manufacturer</th>
+                <th>Batch</th>
+                <th>Expiry Date</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Rx</th>
+                <th>Status</th>
+                <th sec:authorize="hasAnyRole('OWNER','PHARMACIST')">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="med : ${medicines}">
+                <td>
+                    <strong th:text="${med.name}">Paracetamol</strong>
+                </td>
+                <td th:text="${med.category}">Analgesic</td>
+                <td th:text="${med.manufacturer}">PharmaCo</td>
+                <td>
+                    <code class="text-sm" th:text="${med.batchNumber}">B001</code>
+                </td>
+                <td th:text="${med.expiryDate}">2025-12-31</td>
+                <td th:text="${#numbers.formatDecimal(med.price, 1, 2)}">10.00</td>
+                <td>
+                    <strong th:text="${med.stockQuantity}">100</strong>
+                </td>
+                <td>
+                    <span th:if="${med.prescriptionRequired}" class="badge badge-rx">Rx</span>
+                </td>
+                <td>
+                    <!-- Status badge logic -->
+                    <span th:if="${med.expired}" class="badge badge-expired">Expired</span>
+                    <span th:if="${!med.expired and med.nearExpiry}" class="badge badge-near-expiry">Near Expiry</span>
+                    <span th:if="${!med.expired and !med.nearExpiry and med.lowStock}" class="badge badge-low-stock">Low Stock</span>
+                    <span th:if="${!med.expired and !med.nearExpiry and !med.lowStock}" class="badge badge-in-stock">In Stock</span>
+                </td>
+                <td sec:authorize="hasAnyRole('OWNER','PHARMACIST')">
+                    <div class="btn-group">
+                        <a th:href="@{/medicines/edit/{id}(id=${med.id})}" class="btn btn-sm btn-secondary">Edit</a>
+                        <a th:href="@{/medicines/delete/{id}(id=${med.id})}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this medicine?');">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="${medicines == null or medicines.isEmpty()}">
+                <td colspan="10" class="text-center text-muted p-3">No medicines in inventory.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

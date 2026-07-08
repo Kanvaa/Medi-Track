@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MediTrack — Sales</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrapper">
+
+    <div class="page-header">
+        <h1>🧾 Sales</h1>
+        <a th:href="@{/sales/new}" class="btn btn-primary">+ New Sale</a>
+    </div>
+
+    <!-- Flash messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer Name</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Sold By</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sale : ${sales}">
+                <td th:text="${sale.id}">1</td>
+                <td th:text="${sale.customerName}">John Doe</td>
+                <td th:text="${#numbers.formatDecimal(sale.totalAmount, 1, 2)}">0.00</td>
+                <td>
+                    <span th:if="${sale.status.name() == 'COMPLETED'}" class="badge badge-completed">Completed</span>
+                    <span th:if="${sale.status.name() == 'CANCELLED'}" class="badge badge-cancelled">Cancelled</span>
+                    <span th:if="${sale.status.name() == 'RETURNED'}" class="badge badge-returned">Returned</span>
+                </td>
+                <td th:text="${#temporals.format(sale.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01</td>
+                <td th:text="${sale.soldBy.username}">admin</td>
+                <td>
+                    <a th:href="@{/sales/{id}(id=${sale.id})}" class="btn btn-sm btn-outline">View Detail</a>
+                </td>
+            </tr>
+            <tr th:if="${sales == null or sales.isEmpty()}">
+                <td colspan="7" class="text-center text-muted p-3">No sales recorded yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

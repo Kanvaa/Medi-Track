@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MediTrack — Sale Detail</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrapper">
+
+    <div class="page-header">
+        <h1>🧾 Sale #<span th:text="${sale.id}">1</span> Details</h1>
+        <a th:href="@{/sales}" class="btn btn-secondary">← Back to Sales</a>
+    </div>
+
+    <!-- Flash messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <!-- ── Sale Info Card ── -->
+    <div class="card mb-3">
+        <div class="card-header">Sale Information</div>
+        <div class="detail-grid">
+
+            <div class="detail-item">
+                <div class="detail-item-label">Customer Name</div>
+                <div class="detail-item-value" th:text="${sale.customerName}">John Doe</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-item-label">Customer Phone</div>
+                <div class="detail-item-value" th:text="${decryptedPhone != null ? decryptedPhone : '—'}">—</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-item-label">Prescription Number</div>
+                <div class="detail-item-value" th:text="${decryptedPrescription != null and !decryptedPrescription.isEmpty() ? decryptedPrescription : '—'}">—</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-item-label">Status</div>
+                <div class="detail-item-value">
+                    <span th:if="${sale.status.name() == 'COMPLETED'}" class="badge badge-completed">Completed</span>
+                    <span th:if="${sale.status.name() == 'CANCELLED'}" class="badge badge-cancelled">Cancelled</span>
+                    <span th:if="${sale.status.name() == 'RETURNED'}" class="badge badge-returned">Returned</span>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-item-label">Total Amount</div>
+                <div class="detail-item-value" th:text="'₹ ' + ${#numbers.formatDecimal(sale.totalAmount, 1, 2)}">₹ 0.00</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-item-label">Date</div>
+                <div class="detail-item-value" th:text="${#temporals.format(sale.createdAt, 'yyyy-MM-dd HH:mm')}">2025-01-01</div>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-item-label">Sold By</div>
+                <div class="detail-item-value" th:text="${sale.soldBy.username}">admin</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Sale Items Table ── -->
+    <h2 class="section-title">📦 Items</h2>
+
+    <div class="table-responsive mb-3">
+        <table>
+            <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Batch (at sale)</th>
+                <th>Quantity</th>
+                <th>Unit Price (at sale)</th>
+                <th>Line Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${sale.items}">
+                <td th:text="${item.medicine.name}">Paracetamol</td>
+                <td>
+                    <code class="text-sm" th:text="${item.batchNumberAtSale}">B001</code>
+                </td>
+                <td th:text="${item.quantity}">2</td>
+                <td th:text="${#numbers.formatDecimal(item.unitPriceAtSale, 1, 2)}">10.00</td>
+                <td>
+                    <strong th:text="${#numbers.formatDecimal(item.lineTotal, 1, 2)}">20.00</strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── Status Update ── -->
+    <div class="card" style="max-width: 420px;">
+        <div class="card-header">Update Status</div>
+        <form th:action="@{/sales/{id}/status(id=${sale.id})}" method="post" class="form-inline">
+            <div class="form-group mb-0" style="flex:1;">
+                <select name="status" class="form-control">
+                    <option th:each="s : ${statuses}"
+                            th:value="${s}"
+                            th:text="${s}"
+                            th:selected="${s == sale.status}">STATUS
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
