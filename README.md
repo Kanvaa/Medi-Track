@@ -121,7 +121,7 @@ Prevents lazy-loading from masking N+1 query problems. Forces explicit data fetc
 
 ## 📄 License
 
-This project is for educational/portfolio purposes.
+This project was built from scratch by me as part of my learning journey in Java and Spring Boot. Feel free to explore the code, learn from it, or use it as a reference for your own projects. If you found it helpful, a ⭐ on the repo would mean a lot!
 
 ## 👤 Author
 
