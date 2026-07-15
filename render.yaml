@@ -13,10 +13,6 @@ services:
         fromDatabase:
           name: meditrack-db
           property: connectionString
-    disk:
-      name: meditrack-data
-      mountPath: /data
-      sizeGB: 1
 
 databases:
   - name: meditrack-db
