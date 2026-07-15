@@ -5,14 +5,6 @@ services:
     plan: free
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: prod
+        value: default
       - key: APP_ENCRYPTION_SECRET
         generateValue: true
-      - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: meditrack-db
-          property: connectionString
-
-databases:
-  - name: meditrack-db
-    plan: free
