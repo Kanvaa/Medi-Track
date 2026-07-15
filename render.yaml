@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: medi-track
+    env: docker
+    plan: free
+    startCommand: java -jar app.jar --server.port=80
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: APP_ENCRYPTION_SECRET
+        generateValue: true
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: meditrack-db
+          property: connectionString
+    disk:
+      name: meditrack-data
+      mountPath: /data
+      sizeGB: 1
+
+databases:
+  - name: meditrack-db
+    plan: free
