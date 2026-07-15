@@ -2,8 +2,6 @@
 
 A full-stack **Spring Boot 3.3** web application for small pharmacy businesses to manage inventory, process sales, and enforce security best practices.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render.svg)](https://render.com/deploy?repo=https://github.com/Kanvaa/Medi-Track)
-
 ## 🔑 Key Features
 
 ### 🔒 Security
@@ -69,7 +67,7 @@ cd meditrack
 ./mvnw spring-boot:run
 ```
 
-Open **http://localhost:8080** in your browser.
+Open **http://localhost** in your browser.
 
 ### Default Login Credentials
 
