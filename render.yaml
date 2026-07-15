@@ -3,7 +3,6 @@ services:
     name: medi-track
     env: docker
     plan: free
-    startCommand: java -jar app.jar --server.port=80
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
