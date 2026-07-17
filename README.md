@@ -55,21 +55,8 @@ A full-stack **Spring Boot 3.3** web application for small pharmacy businesses t
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Java 17+ installed
-- Maven 3.9+ (or use the included Maven Wrapper)
-
-### Run with H2 (No Database Setup Required)
-```bash
-# Clone the repo
-git clone https://github.com/YOUR_USERNAME/meditrack.git
-cd meditrack
-
-# Run the app
-./mvnw spring-boot:run
-```
-
-Open **http://localhost** in your browser.
+To access the live application, visit the cloud deployment:
+👉 **[MediTrack Live App](https://medi-track-k9xz.onrender.com)**
 
 ### Default Login Credentials
 
@@ -78,15 +65,6 @@ Open **http://localhost** in your browser.
 | `owner` | `ChangeMe123!` | OWNER (full access) |
 | `pharmacist` | `ChangeMe123!` | PHARMACIST (inventory + sales) |
 | `staff` | `ChangeMe123!` | STAFF (sales only) |
-
-### Run with MySQL (Production)
-1. Install MySQL and create the database:
-   ```sql
-   CREATE DATABASE meditrack_db;
-   ```
-2. Edit `src/main/resources/application.properties` — comment out H2 block, uncomment MySQL block
-3. Set your MySQL password in the properties file
-4. Run: `./mvnw spring-boot:run`
 
 ## 📁 Project Structure
 
