@@ -1,5 +1,6 @@
 package com.meditrack.pharmacy.security;
 
+import com.meditrack.pharmacy.service.LoginAttemptService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +18,11 @@ import java.io.IOException;
 @Component
 public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    public LoginFailureHandler() {
+    private final LoginAttemptService loginAttemptService;
+
+    public LoginFailureHandler(LoginAttemptService loginAttemptService) {
         super("/login?error=true");
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
@@ -32,8 +36,14 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
             // Backoff message — show the actual wait time
             message = exception.getMessage();
         } else {
-            // Generic message — don't reveal whether username or password was wrong
-            message = "Invalid username or password.";
+            // Generic message + check if backoff timer is now active for this username
+            String username = request.getParameter("username");
+            long wait = loginAttemptService.remainingBackoffSeconds(username);
+            if (wait > 0) {
+                message = "Invalid credentials. Account locked for " + wait + " seconds.";
+            } else {
+                message = "Invalid username or password.";
+            }
         }
 
         request.getSession().setAttribute("loginMessage", message);
