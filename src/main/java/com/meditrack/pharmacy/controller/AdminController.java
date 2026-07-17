@@ -61,6 +61,20 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    @PostMapping("/admin/users/{id}/change-password")
+    public String adminChangePassword(@PathVariable Long id,
+                                      @RequestParam String newPassword,
+                                      Authentication auth,
+                                      RedirectAttributes redirect) {
+        try {
+            userService.adminChangePassword(id, newPassword, auth.getName());
+            redirect.addFlashAttribute("success", "Password updated successfully.");
+        } catch (IllegalStateException e) {
+            redirect.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/users";
+    }
+
     @GetMapping("/audit-log")
     public String auditLog(Model model) {
         model.addAttribute("logs", auditLogService.recent(200));

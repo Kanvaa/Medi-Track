@@ -70,6 +70,18 @@ public class UserService {
     }
 
     @Transactional
+    public void adminChangePassword(Long userId, String newPassword, String actor) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        if (newPassword.length() < 8) {
+            throw new IllegalStateException("Password must be at least 8 characters.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        auditLogService.log(actor, "USER_PASSWORD_RESET", "Admin updated password for user: " + user.getUsername());
+    }
+
+    @Transactional
     public void changePassword(String username, String currentPassword, String newPassword) {
         User user = findByUsername(username);
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {

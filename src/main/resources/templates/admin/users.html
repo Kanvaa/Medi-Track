@@ -82,7 +82,7 @@
                 <td th:text="${user.failedLoginAttempts}">0</td>
                 <td th:text="${user.lastFailedAttemptAt != null ? user.lastFailedAttemptAt : '—'}">—</td>
                 <td>
-                    <div class="btn-group">
+                    <div class="btn-group" style="flex-wrap: wrap; gap: 0.25rem;">
                         <!-- Enable / Disable Toggle -->
                         <form th:action="@{/admin/users/{id}/toggle(id=${user.id})}" method="post" style="display:inline;">
                             <input type="hidden" name="enabled" th:value="${!user.enabled}"/>
@@ -96,6 +96,17 @@
                               style="display:inline;">
                             <button type="submit" class="btn btn-xs btn-secondary">Reset Backoff</button>
                         </form>
+                        <!-- Change Password Action -->
+                        <button type="button" class="btn btn-xs btn-outline" 
+                                th:onclick="'toggleEditPassword(' + ${user.id} + ')'">Change PW</button>
+                    </div>
+                    <!-- Inline Password edit box -->
+                    <div th:id="'pw-box-' + ${user.id}" style="display:none; margin-top: 0.5rem;">
+                        <form th:action="@{/admin/users/{id}/change-password(id=${user.id})}" method="post" class="form-inline">
+                            <input type="password" name="newPassword" placeholder="Min 8 chars" required minlength="8"
+                                   class="form-control" style="width: 130px; display:inline-block; padding: 0.25rem 0.5rem; font-size: 0.8rem;"/>
+                            <button type="submit" class="btn btn-xs btn-primary" style="margin-left: 0.25rem;">Save</button>
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -108,5 +119,15 @@
 
 </div>
 
+<script>
+function toggleEditPassword(userId) {
+    var box = document.getElementById('pw-box-' + userId);
+    if (box.style.display === 'none') {
+        box.style.display = 'block';
+    } else {
+        box.style.display = 'none';
+    }
+}
+</script>
 </body>
 </html>
