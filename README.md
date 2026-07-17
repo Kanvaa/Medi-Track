@@ -2,6 +2,8 @@
 
 A full-stack **Spring Boot 3.3** web application for small pharmacy businesses to manage inventory, process sales, and enforce security best practices.
 
+🔗 **Live Demo**: [https://medi-track-k9xz.onrender.com](https://medi-track-k9xz.onrender.com)
+
 ## 🔑 Key Features
 
 ### 🔒 Security
