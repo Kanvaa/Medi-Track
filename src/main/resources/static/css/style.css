@@ -933,3 +933,11 @@ tbody tr.row-danger:hover {
     body { background: #fff; }
     .card { box-shadow: none; border: 1px solid #ddd; }
 }
+
+/* Disable default MS Edge password reveal icon */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+

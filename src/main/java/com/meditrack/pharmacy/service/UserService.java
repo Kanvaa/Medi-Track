@@ -69,6 +69,20 @@ public class UserService {
                 "Reset backoff for user: " + user.getUsername());
     }
 
+    @Transactional
+    public void changePassword(String username, String currentPassword, String newPassword) {
+        User user = findByUsername(username);
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalStateException("Current password is incorrect.");
+        }
+        if (newPassword.length() < 8) {
+            throw new IllegalStateException("New password must be at least 8 characters.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        auditLogService.log(username, "PASSWORD_CHANGE", "User changed their own password.");
+    }
+
     public long count() {
         return userRepository.count();
     }
